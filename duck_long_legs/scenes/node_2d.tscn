@@ -1,23 +1,47 @@
 [gd_scene format=3 uid="uid://dowxnuoqrj8oj"]
 
 [ext_resource type="PackedScene" uid="uid://3if7e66vijrv" path="res://scenes/player.tscn" id="1_6e84v"]
+[ext_resource type="Script" uid="uid://ii1aww04ym2y" path="res://scenes/infinite_ground.gd" id="2_r8kjt"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_6e84v"]
+bounce = 0.2
+absorbent = true
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_6e84v"]
+blend_mode = 3
+light_mode = 1
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_6e84v"]
-distance = -174.0
+distance = 36.0
 
 [node name="Node2D" type="Node2D" unique_id=1742930931]
 
-[node name="player" parent="." unique_id=1097524155 instance=ExtResource("1_6e84v")]
-position = Vector2(-4, -5)
-
-[node name="Camera2D" type="Camera2D" parent="player" unique_id=894536488]
-position = Vector2(4, 5)
-position_smoothing_enabled = true
+[node name="player" parent="." unique_id=1345949987 instance=ExtResource("1_6e84v")]
+position = Vector2(-2, 5)
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=480964400]
 modulate = Color(0.21176471, 0, 1, 1)
+show_behind_parent = true
 top_level = true
+position = Vector2(4, -15)
+physics_material_override = SubResource("PhysicsMaterial_6e84v")
+
+[node name="ColorRect" type="ColorRect" parent="StaticBody2D" unique_id=1907626946]
+offset_left = -9927.0
+offset_top = 5.0
+offset_right = 10073.0
+offset_bottom = 1179.0
+mouse_filter = 2
+color = Color(0.2, 0.6, 0.2, 1)
+script = ExtResource("2_r8kjt")
+follow_node = NodePath("../../player/Body")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=538488442]
+modulate = Color(0.105882354, 0.02745098, 1, 1)
+self_modulate = Color(0.011764706, 0.011764706, 1, 1)
+show_behind_parent = true
+top_level = true
+material = SubResource("CanvasItemMaterial_6e84v")
+position = Vector2(-5, 36)
 shape = SubResource("WorldBoundaryShape2D_6e84v")
-debug_color = Color(0, 0.6, 0.69803923, 0.99215686)
+debug_color = Color(0.9123837, 0.18475142, 0.5699999, 0.99215686)

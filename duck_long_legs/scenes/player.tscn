@@ -1,26 +1,163 @@
-[gd_scene format=3 uid="uid://3if7e66vijrv"]
+[gd_scene load_steps=5 format=3 uid="uid://3if7e66vijrv"]
 
-[ext_resource type="Texture2D" uid="uid://bniitjiai616q" path="res://icon.svg" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://0xvpoqrf8bnt" path="res://scenes/player.gd" id="1_g2els"]
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_wtcfe"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("1_4flbx")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(50, 50)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_0e48y"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_thigh"]
+radius = 3.0
+height = 200.0
 
-[node name="player" type="CharacterBody2D" unique_id=1097524155]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_shin"]
+radius = 2.0
+height = 200.0
+
+[node name="player" type="Node2D"]
 script = ExtResource("1_g2els")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=767821837]
-sprite_frames = SubResource("SpriteFrames_wtcfe")
+[node name="Body" type="RigidBody2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(0, -420)
+mass = 5.0
+center_of_mass_mode = 1
+center_of_mass = Vector2(0, -10)
+can_sleep = false
+angular_damp = 2.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=359209990]
-shape = SubResource("RectangleShape2D_0e48y")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Body"]
+shape = SubResource("RectangleShape2D_body")
+
+[node name="ColorRect" type="ColorRect" parent="Body"]
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
+color = Color(0.85, 0.3, 0.3, 1)
+
+[node name="Camera2D" type="Camera2D" parent="Body"]
+ignore_rotation = true
+zoom = Vector2(0.8, 0.8)
+position_smoothing_enabled = true
+
+[node name="ThighL" type="RigidBody2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-15, -320)
+mass = 0.2
+can_sleep = false
+angular_damp = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ThighL"]
+shape = SubResource("CapsuleShape2D_thigh")
+
+[node name="ColorRect" type="ColorRect" parent="ThighL"]
+offset_left = -3.0
+offset_top = -100.0
+offset_right = 3.0
+offset_bottom = 100.0
+color = Color(0.3, 0.3, 0.85, 1)
+
+[node name="ShinL" type="RigidBody2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-15, -120)
+mass = 0.2
+can_sleep = false
+angular_damp = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShinL"]
+shape = SubResource("CapsuleShape2D_shin")
+
+[node name="ColorRect" type="ColorRect" parent="ShinL"]
+offset_left = -2.0
+offset_top = -100.0
+offset_right = 2.0
+offset_bottom = 100.0
+color = Color(0.4, 0.4, 0.95, 1)
+
+[node name="FootL" type="Marker2D" parent="ShinL"]
+unique_name_in_owner = true
+position = Vector2(0, 100)
+
+[node name="RayCastL" type="RayCast2D" parent="ShinL/FootL"]
+unique_name_in_owner = true
+target_position = Vector2(0, 40)
+
+[node name="ThighR" type="RigidBody2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(15, -320)
+mass = 0.2
+can_sleep = false
+angular_damp = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ThighR"]
+shape = SubResource("CapsuleShape2D_thigh")
+
+[node name="ColorRect" type="ColorRect" parent="ThighR"]
+offset_left = -3.0
+offset_top = -100.0
+offset_right = 3.0
+offset_bottom = 100.0
+color = Color(0.3, 0.85, 0.3, 1)
+
+[node name="ShinR" type="RigidBody2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(15, -120)
+mass = 0.2
+can_sleep = false
+angular_damp = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShinR"]
+shape = SubResource("CapsuleShape2D_shin")
+
+[node name="ColorRect" type="ColorRect" parent="ShinR"]
+offset_left = -2.0
+offset_top = -100.0
+offset_right = 2.0
+offset_bottom = 100.0
+color = Color(0.4, 0.95, 0.4, 1)
+
+[node name="FootR" type="Marker2D" parent="ShinR"]
+unique_name_in_owner = true
+position = Vector2(0, 100)
+
+[node name="RayCastR" type="RayCast2D" parent="ShinR/FootR"]
+unique_name_in_owner = true
+target_position = Vector2(0, 40)
+
+[node name="HipL" type="PinJoint2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-15, -420)
+node_a = NodePath("../Body")
+node_b = NodePath("../ThighL")
+softness = 0.0
+
+[node name="KneeL" type="PinJoint2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-15, -220)
+node_a = NodePath("../ThighL")
+node_b = NodePath("../ShinL")
+softness = 0.0
+
+[node name="HipR" type="PinJoint2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(15, -420)
+node_a = NodePath("../Body")
+node_b = NodePath("../ThighR")
+softness = 0.0
+
+[node name="KneeR" type="PinJoint2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(15, -220)
+node_a = NodePath("../ThighR")
+node_b = NodePath("../ShinR")
+softness = 0.0
+
+[node name="FootAnchorL" type="PinJoint2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-15, -20)
+softness = 0.0
+
+[node name="FootAnchorR" type="PinJoint2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(15, -20)
+softness = 0.0
